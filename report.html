@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carbon Footprint Report</title>
+  <style>
+    body {
+      font-family: 'Lora', serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-top: 20px;
+    }
+    .report-container {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+    .company {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #333;
+    }
+    .entry {
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+    }
+    .entry:last-child {
+      border: none;
+    }
+    .entry div {
+      margin-bottom: 5px;
+      color: #555;
+    }
+    .download-btn {
+      display: block;
+      width: 200px;
+      margin: 20px auto;
+      padding: 10px;
+      text-align: center;
+      text-decoration: none;
+      background-color: #6fa861;
+      color: #fff;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    .download-btn:hover {
+      background-color: #5a8a4e;
+    }
+    .suggestions {
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+    .suggestions h3 {
+      margin-top: 0;
+      color: #333;
+    }
+    .suggestions ul {
+      list-style-type: disc;
+      padding-left: 20px;
+    }
+    .suggestions li {
+      margin-bottom: 10px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>Carbon Footprint Report</h1>
+  <div class="report-container">
+    <div class="company"><strong>Company:</strong> {{ company_name }}</div>
+    
+    {% if history %}
+      {% for record in history %}
+        <div class="entry">
+          <div><strong>Date:</strong> {{ record.date }}</div>
+          <div><strong>Total Emission:</strong> {{ record.total_emissions }} kg CO₂</div>
+        </div>
+      {% endfor %}
+      <div class="entry">
+        <div><strong>Overall Total Emission:</strong> {{ overall_total }} kg CO₂</div>
+      </div>
+    {% else %}
+      <p>No data found for this user.</p>
+    {% endif %}
+    
+    <a class="download-btn" href="{{ url_for('download_report', user_id=user_id, company_name=company_name) }}">
+      Print Details (.txt)
+    </a>
+
+    <div class="suggestions">
+      <h3>Suggestions for Reducing Carbon Footprint</h3>
+      <ul>
+        <li>Switch to renewable energy sources for electricity.</li>
+        <li>Encourage remote work to reduce business travel.</li>
+        <li>Implement a recycling program to reduce office waste.</li>
+        <li>Install water-saving devices to reduce water consumption.</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

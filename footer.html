@@ -1,0 +1,38 @@
+<footer style="position: fixed; bottom: 0; left: 0; width: 100%; background-color: rgba(112,170,96,0.7); padding: 10px; display: flex; justify-content: space-between; align-items: center; z-index: 100;">
+    <div id="project-copyright" style="display: flex; align-items: center;">
+        <p style="margin: 0; color: rgba(255,255,255,0.6); font-size: 10px;">Carbon Footprint Project</p>
+    </div>
+    <div id="team-members" style="display: flex; justify-content: center; align-items: center; margin-right: 15px;">
+        <button onclick="showTeamMembers()" 
+           style="background-color: #6fa861; color: #1b1e23; padding: 10px 20px; font-size: 14px; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;">
+            <h4>🛡️Team Members</h4>
+            <h4> INSTAGRAM ID'S</h4>
+        </button>
+    </div>
+  </footer>
+  
+  <div id="popup" style="display: none; background-color: rgba(255, 255, 255, 1); padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 200;">
+      <h3>Team Members</h3>
+      <ul style="list-style-type: none; padding: 0; font-size: 16px;">
+          <li>1. Rohit Sharma</li><li><div class="footer"><a href="https://instagram.com/rohitsharma48e" target="_blank"><b>Rohit Sharma</b></a></li>
+          <li>2. Girikumar</li>  <li><div class="footer"><a href="https://instagram.com/its_me_girikumar.s" target="_blank"><b>Siripireddy Giri</b></a></li>
+          <li>3. Mohammed Usman Shaik</li><li><div class="footer"><a href="https://instagram.com/usmansjf" target="_blank"><b>Usman Sheikh</b></a></li>
+          <li>4. Mohammed Maaz</li><li><div class="footer"><a href="https://instagram.com/pratap_636" target="_blank"><b>Maaz</b></a></li>
+      </ul>
+      <button onclick="closePopup()" style="background-color: #ff6f61; color: white; padding: 8px 16px; border: none; border-radius: 5px; cursor: pointer;">
+          Close
+      </button>
+  </div>
+  
+  <script>
+      function showTeamMembers() {
+          const popup = document.getElementById('popup');
+          popup.style.display = 'block';
+      }
+  
+      function closePopup() {
+          const popup = document.getElementById('popup');
+          popup.style.display = 'none';
+      }
+  </script>
+  

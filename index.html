@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carbon Footprint Calculator</title>
+  <link rel="stylesheet" href="static/style.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <script>
+    let currentIndexPopup = null;
+  
+    function showIndexPopup(popupId) {
+      const popup = document.getElementById(popupId);
+      popup.classList.add("show");  
+      currentIndexPopup = popup;
+      popup.addEventListener("click", function(event) {
+        if (event.target === popup) {
+          closeIndexPopup();
+        }
+      });
+    }
+  
+    function closeIndexPopup() {
+      if (currentIndexPopup) {
+        currentIndexPopup.classList.remove("show"); 
+        currentIndexPopup = null;
+      }
+    }
+  
+    
+    async function saveUserData() {
+      const userForm = document.getElementById("userForm");
+      const formData = new FormData(userForm);
+  
+      const data = {
+        user_id: formData.get("reg_user_id"),
+        company_name: formData.get("reg_company_name")
+      };
+  
+      const response = await fetch("/add_user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+  
+      const result = await response.json();
+      if (response.ok) {
+        alert(result.message);
+        closeIndexPopup();
+      } else {
+        alert("Error: " + result.error);
+      }
+    }
+  
+
+    async function saveFootprint() {
+      const form = document.getElementById("footprintForm");
+      const formData = new FormData(form);
+  
+      const data = {
+        user_id: formData.get("calc_user_id"),
+        company_name: formData.get("calc_company_name"),
+        electricity_usage: parseFloat(formData.get("electricity_usage")),
+        business_travel: parseFloat(formData.get("business_travel")),
+        office_waste: parseFloat(formData.get("office_waste")),
+        water_consumption: parseFloat(formData.get("water_consumption"))
+      };
+  
+      const response = await fetch("/add_footprint", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+  
+      const result = await response.json();
+      if (response.ok) {
+        alert(`Carbon footprint calculated: ${result.total_emissions} kg CO₂`);
+        closeIndexPopup();
+      } else {
+        alert("Error: " + result.error);
+      }
+    }
+  
+  
+    async function getFootprints() {
+      const form = document.getElementById("getFootprintsForm");
+      const formData = new FormData(form);
+      const userId = formData.get("get_user_id");
+      const companyName = formData.get("get_company_name");
+  
+      const response = await fetch(`/get_footprints/${userId}/${companyName}`);
+      const result = await response.json();
+      if (response.ok) {
+        alert("Footprints: " + JSON.stringify(result));
+        closeIndexPopup();
+      } else {
+        alert("Error: " + result.message);
+      }
+    }   
+  </script>    
+  
+</head>
+<body>
+    {% include 'header.html' %}
+
+
+  <div class="container">
+    <div class="main-content">
+      <p>Use this app to calculate your carbon footprint based on your activities.</p>
+    </div>
+    <div class="button-container">
+      <button onclick="showIndexPopup('registerPopup')">Register User</button>
+      <button onclick="showIndexPopup('footprintPopup')">Calculate Carbon Footprint</button>
+      <button onclick="showIndexPopup('getFootprintsPopup')">Get Carbon Footprints</button>
+    </div>
+
+
+    <div id="registerPopup" class="popup">
+      <h3>Register User</h3>
+      <form id="userForm" onsubmit="event.preventDefault(); saveUserData();">
+        <label for="reg_user_id">User ID:</label>
+        <input type="text" id="reg_user_id" name="reg_user_id" required />
+
+        <label for="reg_company_name">Company Name:</label>
+        <input type="text" id="reg_company_name" name="reg_company_name" required />
+
+        <button type="submit">Save User Information</button>
+        <button type="button" onclick="closeIndexPopup()">Cancel</button>
+      </form>
+    </div>
+
+    <div id="footprintPopup" class="popup">
+      <h3>Calculate Carbon Footprint</h3>
+      <form id="footprintForm" onsubmit="event.preventDefault(); saveFootprint();">
+        <label for="calc_user_id">User ID:</label>
+        <input type="text" id="calc_user_id" name="calc_user_id" required />
+
+        <label for="calc_company_name">Company Name:</label>
+        <input type="text" id="calc_company_name" name="calc_company_name" required />
+
+        <label for="electricity_usage">Electricity Usage (kWh):</label>
+        <input type="number" id="electricity_usage" name="electricity_usage" required />
+
+        <label for="business_travel">Business Travel (km):</label>
+        <input type="number" id="business_travel" name="business_travel" required />
+
+        <label for="office_waste">Office Waste (kg):</label>
+        <input type="number" id="office_waste" name="office_waste" required />
+
+        <label for="water_consumption">Water Consumption (liters):</label>
+        <input type="number" id="water_consumption" name="water_consumption" required />
+
+        <button type="submit">Calculate Footprint</button>
+        <button type="button" onclick="closeIndexPopup()">Cancel</button>
+      </form>
+    </div>
+
+    <div id="getFootprintsPopup" class="popup">
+      <h3>Get Carbon Footprints</h3>
+      <form id="getFootprintsForm" onsubmit="event.preventDefault(); getFootprints();">
+        <label for="get_user_id">User ID:</label>
+        <input type="text" id="get_user_id" name="get_user_id" required />
+
+        <label for="get_company_name">Company Name:</label>
+        <input type="text" id="get_company_name" name="get_company_name" required />
+
+        <button type="submit">Retrieve Details</button>
+        <button type="button" onclick="closeIndexPopup()">Cancel</button>
+      </form>
+    </div>
+
+    {% include 'footer.html' %}
+  </div>
+</body>
+</html>
